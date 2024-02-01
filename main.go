@@ -5,8 +5,11 @@ import (
 	"log"
 	"os"
 
-	"main/gitlab"
-	"main/outlook"
+	"github.com/joho/godotenv"
+
+	"go-obsidian/gitlab"
+	"go-obsidian/jira"
+	"go-obsidian/outlook"
 )
 
 var home string
@@ -15,6 +18,10 @@ func init() {
 	var err error
 	home, err = os.UserHomeDir()
 	if err != nil {
+		panic(err)
+	}
+
+	if err := godotenv.Load(); err != nil {
 		panic(err)
 	}
 }
@@ -27,6 +34,7 @@ func main() {
 
 	outlook.Sync(home, path)
 	gitlab.Sync(home, path)
+	jira.Sync(home, path)
 
 	log.Println("completed.")
 }

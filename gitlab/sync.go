@@ -3,13 +3,12 @@ package gitlab
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"log"
 	"os"
 	"strings"
-	"time"
 
-	"main/gitlab/model"
+	"go-obsidian/gitlab/model"
+	"go-obsidian/note"
 )
 
 func Sync(home string, path string) {
@@ -49,8 +48,9 @@ func Sync(home string, path string) {
 		writeProject(outputReview, project, reviewRequests)
 	}
 
-	save(outputMerge, home, path, "Merge Requests.md")
-	save(outputReview, home, path, "Review Requests.md")
+	note.Save(outputMerge, home, path, "Merge Requests.md")
+	note.Save(outputReview, home, path, "Review Requests.md")
+	log.Println("gitlab completed.")
 }
 
 func writeProject(output *bytes.Buffer, project model.Project, mergeRequests []model.MergeRequest) {
@@ -74,22 +74,4 @@ func writeProject(output *bytes.Buffer, project model.Project, mergeRequests []m
 	}
 
 	fmt.Fprintln(output)
-}
-
-func save(output *bytes.Buffer, home string, path string, name string) {
-	fmt.Fprintf(output, "_last updated @ %s_ \n\n", time.Now().Format("2006-01-02 15:04"))
-
-	file, err := os.OpenFile(fmt.Sprintf("%s/%s/%s", home, path, name), os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0666)
-	defer file.Close()
-	if err != nil {
-		log.Println("got error", err)
-		return
-	}
-
-	if _, err := io.Copy(file, output); err != nil {
-		log.Println("got error", err)
-		return
-	}
-
-	log.Println("gitlab sync completed.")
 }

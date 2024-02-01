@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"main/gitlab/model"
+	"go-obsidian/gitlab/model"
 )
 
 type Client struct {
@@ -34,8 +34,10 @@ func (c *Client) doRequest(req *http.Request) ([]byte, error) {
 	}
 
 	buff, err := io.ReadAll(resp.Body)
-
 	defer resp.Body.Close()
+	if err != nil {
+		return nil, err
+	}
 
 	return buff, nil
 }
