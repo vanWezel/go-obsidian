@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*.*.*'
+    branches:
+      - 'main'
 
 jobs:
   build:
@@ -19,7 +21,7 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v3
         with:
-          go-version: '1.23' # Use the appropriate Go version
+          go-version: 'latest'
 
       - name: Build
         env:
