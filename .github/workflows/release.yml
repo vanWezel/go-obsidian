@@ -5,13 +5,12 @@ on:
     tags:
       - 'v*.*.*'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        goos: [ linux, darwin, windows ]
-        goarch: [ amd64, arm64 ]
 
     steps:
       - name: Checkout code
